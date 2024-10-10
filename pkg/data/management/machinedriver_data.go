@@ -33,6 +33,7 @@ const (
 	Vmwaredriver       = "vmwarevsphere"
 	GoogleDriver       = "google"
 	OutscaleDriver     = "outscale"
+	IncusDriver        = "incus"
 )
 
 var DriverData = map[string]map[string][]string{
@@ -53,6 +54,7 @@ var DriverData = map[string]map[string][]string{
 	Vmwaredriver:       {"publicCredentialFields": []string{"username", "vcenter", "vcenterPort"}, "privateCredentialFields": []string{"password"}},
 	GoogleDriver:       {"privateCredentialFields": []string{"authEncodedJson"}},
 	OutscaleDriver:     {"publicCredentialFields": []string{"accessKey", "region"}, "privateCredentialFields": []string{"secretKey"}},
+	IncusDriver:        {"publicCredentialFields": []string{"url", "tlsClientCert"}, "privateCredentialFields": []string{"tlsClientKey"}},
 }
 
 var driverDefaults = map[string]map[string]string{
@@ -138,6 +140,9 @@ func addMachineDrivers(management *config.ManagementContext) error {
 		return err
 	}
 	if err := addMachineDriver(OutscaleDriver, "https://github.com/outscale/docker-machine-driver-outscale/releases/download/v0.2.0/docker-machine-driver-outscale_0.2.0_linux_amd64.zip", "https://oos.eu-west-2.outscale.com/rancher-ui-driver-outscale/v0.2.0/component.js", "bb539ed4e2b0f1a1083b29cbdbab59bde3efed0a3145fefc0b2f47026c48bfe0", []string{"oos.eu-west-2.outscale.com"}, false, false, false, management); err != nil {
+		return err
+	}
+	if err := addMachineDriver(IncusDriver, "local://", "", "", nil, true, true, false, management); err != nil {
 		return err
 	}
 	return addMachineDriver(Vmwaredriver, "local://", "", "", nil, true, true, false, management)
