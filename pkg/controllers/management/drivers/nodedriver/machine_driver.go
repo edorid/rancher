@@ -41,6 +41,7 @@ var (
 		"pod":           {"userdata": "userdata"},
 		"vmwarevsphere": {"cloud-config": "cloudConfig"},
 		"google":        {"authEncodedJson": "authEncodedJson"},
+		"incus":         {"userdata": "userdata"},
 	}
 	SSHKeyFields = map[string]bool{
 		"sshKeyContents": true,
