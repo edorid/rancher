@@ -65,7 +65,6 @@ var SchemaToDriverFields = map[string]map[string]string{
 	"pod":           {"userdata": "userdata"},
 	"vmwarevsphere": {"cloudConfig": "cloud-config"},
 	"google":        {"authEncodedJson": "authEncodedJson"},
-	"incus":         {"userdata": "userdata"},
 }
 
 func Register(ctx context.Context, management *config.ManagementContext, clusterManager *clustermanager.Manager) {
