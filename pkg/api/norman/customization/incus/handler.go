@@ -37,7 +37,7 @@ var fieldNames = []string{
 }
 
 var (
-	cloudCredentialDataPrefix = "incusCredentialConfig-"
+	cloudCredentialDataPrefix = "incuscredentialConfig-"
 	dataFields                = []string{
 		"url",
 		"tlsClientCert",
