@@ -80,7 +80,7 @@ ENV TINI_VERSION v0.18.0
 ENV TELEMETRY_VERSION v0.6.2
 ENV DOCKER_MACHINE_LINODE_VERSION v0.1.12
 ENV LINODE_UI_DRIVER_VERSION v0.7.0
-ENV INCUS_UI_DRIVER_VERSION v0.0.
+ENV DOCKER_MACHINE_INCUS_VERSION v0.0.2
 # make sure the version number is consistent with the one at Line 100 of pkg/data/management/machinedriver_data.go
 ENV DOCKER_MACHINE_HARVESTER_VERSION v0.6.7
 ENV CATTLE_KDM_BRANCH ${CATTLE_KDM_BRANCH}
@@ -148,7 +148,6 @@ RUN curl -sLf https://github.com/rancher/machine/releases/download/${CATTLE_MACH
 
 RUN curl -LO https://github.com/edorid/docker-machine-driver-incus/releases/download/${DOCKER_MACHINE_INCUS_VERSION}/docker-machine-driver-incus_linux-amd64.zip && \
   unzip docker-machine-driver-incus_linux-amd64.zip -d /opt/drivers/management-state/bin && \
-  mkdir -p /usr/share/rancher/ui/assets/ && \
   ln -s /opt/drivers/management-state/bin/docker-machine-driver-incus /usr/share/rancher/ui/assets/ && \
   rm docker-machine-driver-incus_linux-amd64.zip
 

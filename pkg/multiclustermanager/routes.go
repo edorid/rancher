@@ -11,6 +11,7 @@ import (
 	"github.com/rancher/rancher/pkg/api/norman/customization/aks"
 	"github.com/rancher/rancher/pkg/api/norman/customization/clusterregistrationtokens"
 	"github.com/rancher/rancher/pkg/api/norman/customization/gke"
+	"github.com/rancher/rancher/pkg/api/norman/customization/incus"
 	"github.com/rancher/rancher/pkg/api/norman/customization/oci"
 	"github.com/rancher/rancher/pkg/api/norman/customization/vsphere"
 	managementapi "github.com/rancher/rancher/pkg/api/norman/server"
@@ -115,6 +116,7 @@ func router(ctx context.Context, localClusterEnabled bool, tunnelAuthorizer *mcm
 	authed.Path("/meta/{resource:gke.+}").Handler(gke.NewGKEHandler(scaledContext))
 	authed.Path("/meta/oci/{resource}").Handler(oci.NewOCIHandler(scaledContext))
 	authed.Path("/meta/vsphere/{field}").Handler(vsphere.NewVsphereHandler(scaledContext))
+	authed.Path("/meta/incus/{field}").Handler(incus.NewIncusHandler(scaledContext))
 	authed.Path("/v3/tokenreview").Methods(http.MethodPost).Handler(&webhook.TokenReviewer{})
 	authed.Path("/metrics/{clusterID}").Handler(metricsHandler)
 	authed.Path(supportconfigs.Endpoint).Handler(&supportConfigGenerator)
