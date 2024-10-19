@@ -367,10 +367,17 @@ func getImages(ctx context.Context, cc *corev1.Secret, project string) ([]string
 		return nil, err
 	}
 
+	imgs := []string{}
 	// get images from existing local and remote
-	imgs, err := client.GetImageAliasNames()
+	localImgs, err := client.GetImageAliasNames()
 	if err != nil {
 		return nil, err
+	}
+
+	for _, limg := range localImgs {
+		if strings.Contains(limg, "cloud") && !strings.Contains(limg, "amd64") {
+			imgs = append(imgs, limg)
+		}
 	}
 
 	imageServer := "https://images.linuxcontainers.org"
