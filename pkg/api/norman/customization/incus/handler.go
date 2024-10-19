@@ -388,8 +388,14 @@ func getImages(ctx context.Context, cc *corev1.Secret, project string) ([]string
 		if rimg.Type != "virtual-machine" || rimg.Architecture != "x86_64" {
 			continue
 		}
-		if strings.Contains(rimg.Aliases[0].Name, "cloud") {
-			imgs = append(imgs, rimg.Aliases[0].Name)
+		if len(rimg.Aliases) == 0 {
+			continue
+		}
+		for _, alias := range rimg.Aliases {
+			// only cloud image and amd64 Architecture
+			if strings.Contains(alias.Name, "cloud") && !strings.Contains(alias.Name, "amd64") {
+				imgs = append(imgs, alias.Name)
+			}
 		}
 	}
 
