@@ -80,7 +80,7 @@ ENV TINI_VERSION v0.18.0
 ENV TELEMETRY_VERSION v0.6.2
 ENV DOCKER_MACHINE_LINODE_VERSION v0.1.12
 ENV LINODE_UI_DRIVER_VERSION v0.7.0
-ENV DOCKER_MACHINE_INCUS_VERSION v0.0.2
+ENV DOCKER_MACHINE_INCUS_VERSION v0.0.3
 # make sure the version number is consistent with the one at Line 100 of pkg/data/management/machinedriver_data.go
 ENV DOCKER_MACHINE_HARVESTER_VERSION v0.6.7
 ENV CATTLE_KDM_BRANCH ${CATTLE_KDM_BRANCH}
@@ -147,7 +147,7 @@ RUN curl -sLf https://github.com/rancher/machine/releases/download/${CATTLE_MACH
   rm docker-machine-driver-linode_linux-amd64.zip
 
 RUN curl -LO https://github.com/edorid/docker-machine-driver-incus/releases/download/${DOCKER_MACHINE_INCUS_VERSION}/docker-machine-driver-incus_linux-amd64.zip && \
-  unzip docker-machine-driver-incus_linux-amd64.zip -d /opt/drivers/management-state/bin && \
+  unzip -o docker-machine-driver-incus_linux-amd64.zip -d /opt/drivers/management-state/bin && \
   ln -s /opt/drivers/management-state/bin/docker-machine-driver-incus /usr/share/rancher/ui/assets/ && \
   rm docker-machine-driver-incus_linux-amd64.zip
 
@@ -236,7 +236,7 @@ RUN curl -sLf ${!TINI_URL} > /usr/bin/tini && \
   mkdir -p /var/lib/rancher-data/driver-metadata
 
 ENV CATTLE_UI_VERSION 2.9.2
-ENV CATTLE_DASHBOARD_UI_VERSION v2.9.2
+ENV CATTLE_DASHBOARD_UI_VERSION v2.9.2-edorid3
 ENV CATTLE_CLI_VERSION v2.9.2
 
 # Base UI brand used as a fallback env setting (not user facing) to indicate this is a non-prime install
@@ -265,7 +265,7 @@ RUN mkdir -p /usr/share/rancher/ui && \
   curl -sL https://releases.rancher.com/api-ui/${CATTLE_API_UI_VERSION}.tar.gz | tar xvzf - --strip-components=1 && \
   mkdir -p /usr/share/rancher/ui-dashboard/dashboard && \
   cd /usr/share/rancher/ui-dashboard/dashboard && \
-  curl -sL https://releases.rancher.com/dashboard/${CATTLE_DASHBOARD_UI_VERSION}.tar.gz | tar xvzf - --strip-components=2 && \
+  curl -sL https://github.com/edorid/rancher-dashboard/releases/download/${CATTLE_DASHBOARD_UI_VERSION}}/${CATTLE_DASHBOARD_UI_VERSION}.tar.gz | tar xvzf - --strip-components=2 && \
   ln -s dashboard/index.html ../index.html && \
   cd ../../ui/assets && \
   curl -sfL ${CATTLE_SYSTEM_AGENT_DOWNLOAD_PREFIX}/${CATTLE_SYSTEM_AGENT_VERSION}/rancher-system-agent-arm64 -O && \
