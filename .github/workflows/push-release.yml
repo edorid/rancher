@@ -162,11 +162,11 @@ jobs:
         with:
           name: "rancher-agent-${{ matrix.os }}-${{ matrix.arch }}"
           path: /tmp/rancher-agent-${{ matrix.os }}-${{ matrix.arch }}.tar
-      #     if-no-files-found: error
-      #     retention-days: 1
-      #     overwrite: false
+          if-no-files-found: error
+          retention-days: 1
+          overwrite: false
   push-images:
-    # needs: [build-agent]
+    needs: [build-agent]
     runs-on: ubuntu-latest
     environment:
       name: dev
