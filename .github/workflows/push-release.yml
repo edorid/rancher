@@ -166,6 +166,7 @@ jobs:
           retention-days: 1
           overwrite: false
   push-images:
+    needs: [build-agent]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -189,7 +190,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: ${{ env.DOCKER_USERNAME }}
-          password: ${{ env.DOCKER_PASSWORD }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Push server image
         run: |
           image_id=$(docker load --input /tmp/rancher-${{ matrix.os }}-${{ matrix.arch }}.tar 2>&1 | grep "Loaded image" | awk '{print $NF}')
