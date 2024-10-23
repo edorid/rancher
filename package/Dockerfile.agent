@@ -1,5 +1,5 @@
 ARG RANCHER_TAG=dev
-ARG RANCHER_REPO=rancher
+ARG RANCHER_REPO=edorid
 ARG REGISTRY=docker.io
 ARG RANCHER_IMAGE=${REGISTRY}/${RANCHER_REPO}/rancher:${RANCHER_TAG}
 ARG ARCH
@@ -34,11 +34,11 @@ COPY --from=final / /chroot/
 
 # Install some packages with zypper in the chroot of the final micro image
 RUN zypper refresh && \
-    zypper --installroot /chroot -n in --no-recommends \
-    curl util-linux ca-certificates ca-certificates-mozilla jq git-core hostname iproute2 vim-small less \
-	bash-completion bind-utils acl openssh-clients tar gzip xz gawk sysstat openssl patterns-base-fips && \
-    zypper --installroot /chroot clean -a && \
-    rm -rf /chroot/var/cache/zypp/* /chroot/var/log/zypp/* /chroot/tmp/* /chroot/var/tmp/* /chroot/usr/share/doc/packages/*
+  zypper --installroot /chroot -n in --no-recommends \
+  curl util-linux ca-certificates ca-certificates-mozilla jq git-core hostname iproute2 vim-small less \
+  bash-completion bind-utils acl openssh-clients tar gzip xz gawk sysstat openssl patterns-base-fips && \
+  zypper --installroot /chroot clean -a && \
+  rm -rf /chroot/var/cache/zypp/* /chroot/var/log/zypp/* /chroot/tmp/* /chroot/var/tmp/* /chroot/usr/share/doc/packages/*
 
 # Main stage using bci-micro as the base image
 FROM final
@@ -49,16 +49,16 @@ COPY --from=builder /chroot/ /
 # Test that some of the dependency binaries were copied
 # and are working on the target image.
 RUN /usr/bin/unshare --version && \
-    /usr/bin/mount --version && \
-    /usr/bin/umount --version && \
-    /usr/bin/nsenter --version
+  /usr/bin/mount --version && \
+  /usr/bin/umount --version && \
+  /usr/bin/nsenter --version
 
 ARG ARCH=amd64
 ENV KUBECTL_VERSION v1.27.10
 ARG VERSION=${VERSION}
 
 RUN curl -sLf https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/${ARCH}/kubectl > /usr/bin/kubectl && \
-    chmod +x /usr/bin/kubectl
+  chmod +x /usr/bin/kubectl
 
 ENV LOGLEVEL_VERSION v0.1.6
 

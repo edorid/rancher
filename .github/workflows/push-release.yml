@@ -200,8 +200,8 @@ jobs:
             echo "Error: Failed to load image from tarball!"
             exit 1
           fi
-          docker tag "$image_id" docker.io/${{ env.IMAGE }}:${{ env.TAG }}-${{ matrix.arch }}
-          docker push docker.io/${{ env.IMAGE }}:${{ env.TAG }}-${{ matrix.arch }}
+          docker tag "$image_id" docker.io/${{ env.IMAGE }}:${{ env.TAG }}
+          docker push docker.io/${{ env.IMAGE }}:${{ env.TAG }}
       - name: Push agent image
         run: |
           image_agent_id=$(docker load --input /tmp/rancher-agent-${{ matrix.os }}-${{ matrix.arch }}.tar 2>&1 | grep "Loaded image" | awk '{print $NF}')
@@ -209,5 +209,5 @@ jobs:
             echo "Error: Failed to load image from tarball!"
             exit 1
           fi
-          docker tag "$image_agent_id" docker.io/${{ env.IMAGE_AGENT }}:${{ env.TAG }}-${{ matrix.arch }}
-          docker push docker.io/${{ env.IMAGE_AGENT }}:${{ env.TAG }}-${{ matrix.arch }}
+          docker tag "$image_agent_id" docker.io/${{ env.IMAGE_AGENT }}:${{ env.TAG }}
+          docker push docker.io/${{ env.IMAGE_AGENT }}:${{ env.TAG }}
