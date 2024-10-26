@@ -399,14 +399,29 @@ func getImages(ctx context.Context, cc *corev1.Secret, project string) ([]string
 			continue
 		}
 		for _, alias := range rimg.Aliases {
-			// only cloud image and amd64 Architecture
-			if strings.Contains(alias.Name, "cloud") && !strings.Contains(alias.Name, "amd64") {
+			if acceptableImage(alias.Name) {
 				imgs = append(imgs, alias.Name)
 			}
 		}
 	}
 
 	return imgs, nil
+}
+
+func acceptableImage(img string) bool {
+	if !strings.Contains(img, "cloud") {
+		return false
+	}
+
+	if !strings.Contains(img, "amd64") {
+		return false
+	}
+
+	if !slices.Contains([]string{"debian", "ubuntu", "opensuse", "fedora"}, img) {
+		return false
+	}
+
+	return true
 }
 
 func getProfiles(ctx context.Context, cc *corev1.Secret, project string) ([]string, error) {
