@@ -417,11 +417,13 @@ func acceptableImage(img string) bool {
 		return false
 	}
 
-	if !slices.Contains([]string{"debian", "ubuntu", "opensuse", "fedora"}, img) {
-		return false
+	for _, distro := range []string{"debian", "ubuntu", "opensuse", "fedora"} {
+		if strings.Contains(img, distro) {
+			return true
+		}
 	}
 
-	return true
+	return false
 }
 
 func getProfiles(ctx context.Context, cc *corev1.Secret, project string) ([]string, error) {
