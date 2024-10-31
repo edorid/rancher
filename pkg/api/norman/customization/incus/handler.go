@@ -43,6 +43,17 @@ var (
 		"tlsClientCert",
 		"tlsClientKey",
 	}
+	acceptableImages = []string{
+		"debian/11/cloud/amd64",
+		"debian/12/cloud/amd64",
+		"ubuntu/20.04/cloud/amd64",
+		"ubuntu/22.04/cloud/amd64",
+		"ubuntu/24.04/cloud/amd64",
+		"opensuse/15.6/cloud/amd64",
+		"fedora/39/cloud/amd64",
+		"fedora/40/cloud/amd64",
+	}
+	availableImages = []string{}
 )
 
 type handler struct {
@@ -357,6 +368,10 @@ func getStorages(ctx context.Context, cc *corev1.Secret) ([]string, error) {
 }
 
 func getImages(ctx context.Context, cc *corev1.Secret, project string) ([]string, error) {
+	if len(availableImages) > 0 {
+		return availableImages, nil
+	}
+
 	client, err := getIncus(ctx, cc)
 	if err != nil {
 		return nil, err
@@ -399,31 +414,15 @@ func getImages(ctx context.Context, cc *corev1.Secret, project string) ([]string
 			continue
 		}
 		for _, alias := range rimg.Aliases {
-			if acceptableImage(alias.Name) {
-				imgs = append(imgs, alias.Name)
+			for _, img := range acceptableImages {
+				if alias.Name == img {
+					availableImages = append(availableImages, img)
+				}
 			}
 		}
 	}
 
-	return imgs, nil
-}
-
-func acceptableImage(img string) bool {
-	if !strings.Contains(img, "cloud") {
-		return false
-	}
-
-	if !strings.Contains(img, "amd64") {
-		return false
-	}
-
-	for _, distro := range []string{"debian", "ubuntu", "opensuse", "fedora"} {
-		if strings.Contains(img, distro) {
-			return true
-		}
-	}
-
-	return false
+	return availableImages, nil
 }
 
 func getProfiles(ctx context.Context, cc *corev1.Secret, project string) ([]string, error) {
